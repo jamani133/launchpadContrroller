@@ -11,6 +11,8 @@ String pagePaths[] = {
   "test1.txt"
 };
 
+//weeeeee
+
 boolean defaultToggle = false;
 String currentPagePath = pagePaths[0];
 String pageFile[];
