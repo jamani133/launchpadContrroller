@@ -1,7 +1,6 @@
 make GUI
 add sav e and load fiel system
-add midi output
-led feedback
-active syncronization
 page switching
 editor
+notes
+file compiler
