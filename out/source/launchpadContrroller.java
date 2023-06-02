@@ -33,8 +33,8 @@ String pagePaths[] = {
   "test1.txt"
 };
 
-String a[] = {"none","consts","temp","toggle","fadeOut","flash"};
-
+String a[] = {"none","const","temp","toggle","fadeOut","flash"};
+String notesPath = "ass";
 //wee
 
 boolean defaultToggle = false;
@@ -181,11 +181,11 @@ public void draw() {
     //println(selColRLow);
     //println(selColGLow);
     //println();
-    handleLpClick();
-    drawLP();
     
+    drawLP();
+    handleLpClick();
     updateLight(false);
-
+    compile();
 
   }else{
     connect();
@@ -350,7 +350,10 @@ public void setTime(float xPos,float yPos){
 public void handleLpClick(){
   for(int iy = 0; iy < 8; iy++){
     for(int ix = 0; ix < 9; ix++){
-      if(ButtonSelector(ix*35+620,iy*35+415,35,35) && mousePressed){
+      fill(0,0,255,64);
+      stroke(0);
+      //rect(ix*35+603,iy*35+400,30,30);
+      if(ButtonSelector(ix*35+603,iy*35+400,30,30) && mousePressed){
         LPBs_data[ix][iy] = 0;
         LPBs_mode[ix][iy] = a[ModeSel_];
         LPBs_stdCol[ix][iy] = RG(selColRLow,selColGLow);
@@ -743,8 +746,21 @@ public void MODE_selector(float posX, float posY){
 }
 
 
-public void compile(){
-
+public String compile(){
+  String result = "";
+  result = result + notesPath + "\n";
+  for(int iy = 0; iy < 8; iy++){
+    for(int ix = 0; ix < 9; ix++){
+      result = result + LPBs_mode[ix][iy] + ",";
+      result = result + str(LPBs_stdCol[ix][iy]) + ",";
+      result = result + str(LPBs_highlightCol[ix][iy]) + ",";
+      result = result + str(LPBs_time[ix][iy]) + ",";
+      result = result + str(LPBs_data[ix][iy]) + ",";
+    }
+    result = result.substring(0,result.length()-1) + "\n";
+  }
+  println(result);
+  return result;
 }
 
 public void logo_none(float LogoPosX, float LogoPosY){
