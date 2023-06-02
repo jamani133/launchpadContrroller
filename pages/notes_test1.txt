@@ -1,6 +1,7 @@
-wee
-weee
-weeee
-weeeee
-weeeeee
-alkohol
+notes for test 1
+intro
+solo intro
+ref
+drums
+git setColorref
+outro

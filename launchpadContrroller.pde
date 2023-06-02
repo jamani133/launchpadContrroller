@@ -153,12 +153,23 @@ void draw() {
     prev = keyPressed;
 
 
+    textSize(25);
+    textAlign(TOP,TOP);
+    fill(255);
+    text(join(loadStrings(prePath+"notes_"+currentPagePath), "\n"),320,50,width-380,4000);
+
+
+
 
     if(editorMode){
+      fill(00,0,0,200);
+      noStroke();
+      rect(580,0,1000,1000);
       modeSel(600,70);
       modeSettings();
       drawLP();
       handleLpClick();
+      
     }
 
     
@@ -556,7 +567,7 @@ void SelectorList(String[] options, int index,float posX, float posY){
 
   //printArray(options);
   int optionsNum = options.length;
-  
+  textAlign(BOTTOM,LEFT);
   for(int i = 0; i < optionsNum; i++){
     text(options[i],posX + 20, posY + i * 20 );
   }
@@ -646,7 +657,7 @@ void saveEdit(){
 
   if(ButtonSelector(770,10,80,40)&&mousePressed&&!prevPressed){
     println(prePath+"notes_"+currentPagePath);
-    launch("editor",{prePath+"notes_"+currentPagePath});
+    //launch("editor",{prePath+"notes_"+currentPagePath});
   }
 
 }
@@ -731,11 +742,16 @@ void loadToLP(String blocks[]){
       }
       //println(LPBs_mode[i][o]);
     }
+    
     //println(o);
     //printArray(LPBs_mode[o]);
   }
 
-  
+  for(int iy = 0; iy < 8; iy++){
+      for(int ix = 0; ix < 9; ix++){
+        setColorRaw(lightmap,ix,iy,update(ix,iy));
+      }
+    }
   updateLight(true);
 }
 
