@@ -4,7 +4,7 @@ import javax.sound.midi.SysexMessage;
 import javax.sound.midi.ShortMessage;
 
 
-String prePath = "pages\\";
+String prePath = "pages/";
 
 //String pagePaths[] = loadStrings("files.txt");
 String pagePaths[] = {
@@ -162,9 +162,9 @@ void draw() {
     }
 
     
-    for(int i = 0; i < 9; i++){
-      println(LPBs_mode[i][0] + str(LPBs_stdCol[i][0]) + str(LPBs_highlightCol[i][0]) + str(lightmap[i][0]));
-    }
+    //for(int i = 0; i < 9; i++){
+    //  println(LPBs_mode[i][0] + str(LPBs_stdCol[i][0]) + str(LPBs_highlightCol[i][0]) + str(lightmap[i][0]));
+    //}
     
     
     saveEdit();
@@ -627,11 +627,13 @@ void saveEdit(){
   fill(0,0,127);
   rect(600,10,80,40);
   rect(685,10,80,40);
+  rect(770,10,80,40);
   textAlign(CENTER,CENTER);
   textSize(15);
   fill(255);
   text("edit",640,25);
   text("save",725,25);
+  text("notes",810,25);
 
   if(ButtonSelector(600,10,80,40)&&mousePressed&&!prevPressed){
     editorMode = !editorMode;
@@ -640,6 +642,11 @@ void saveEdit(){
   if(ButtonSelector(685,10,80,40)&&mousePressed&&!prevPressed){
     println("saving");
     saveStrings(prePath+currentPagePath, compile());
+  }
+
+  if(ButtonSelector(770,10,80,40)&&mousePressed&&!prevPressed){
+    println(prePath+"notes_"+currentPagePath);
+    launch("editor",{prePath+"notes_"+currentPagePath});
   }
 
 }
