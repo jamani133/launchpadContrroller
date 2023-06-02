@@ -638,6 +638,17 @@ public int get2Bit(int n, int k) {
 
 
 
+public void saveEdit(){
+  stroke(0);
+  strokeWeight(2);
+  fill(0,0,127);
+  rect(0,0,0,0);
+
+}
+
+
+
+
 public void setColor(int[][] array, int x, int y, int Red, int Green){
   int prevCol = array[x][y];
 
@@ -759,7 +770,7 @@ public String compile(){
     }
     result = result.substring(0,result.length()-1) + "\n";
   }
-  println(result);
+  //println(result);
   return result;
 }
 
