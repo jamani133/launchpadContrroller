@@ -11,6 +11,8 @@ String pagePaths[] = {
   "test1.txt"
 };
 
+String a[] = {"none","consts","temp","toggle","fadeOut","flash"};
+
 //wee
 
 boolean defaultToggle = false;
@@ -157,7 +159,7 @@ void draw() {
     //println(selColRLow);
     //println(selColGLow);
     //println();
-
+    handleLpClick();
     drawLP();
     
     updateLight(false);
@@ -323,7 +325,19 @@ void setTime(float xPos,float yPos){
 
 
 
-
+void handleLpClick(){
+  for(int iy = 0; iy < 8; iy++){
+    for(int ix = 0; ix < 9; ix++){
+      if(ButtonSelector(ix*35+620,iy*35+415,35,35) && mousePressed){
+        LPBs_data[ix][iy] = 0;
+        LPBs_mode[ix][iy] = a[ModeSel_];
+        LPBs_stdCol[ix][iy] = RG(selColRLow,selColGLow);
+        LPBs_highlightCol[ix][iy] = RG(selColRLow,selColGHigh);
+        LPBs_time[ix][iy] = defTime;
+      }
+    }
+  }
+}
 
 
 
