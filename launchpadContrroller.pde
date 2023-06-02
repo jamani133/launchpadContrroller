@@ -20,7 +20,7 @@ String currentPagePath = pagePaths[0];
 String pageFile[];
 
 String[] notes;
-
+boolean editorMode = false;
 boolean prevPressed;
 
 int defTime = 10;
@@ -32,6 +32,7 @@ int LPBs_highlightCol[][] = new int[9][8];
 int LPBs_data[][] = new int[9][8];
 Boolean LPBs_pressed[][] = new Boolean[9][8];
 Boolean LPBs_prevPressed[][] = new Boolean[9][8];
+Boolean LPBs_init[][] = new Boolean[9][8];
 
 int ModeSel_;
 
@@ -76,6 +77,7 @@ void setup() {
       LPBs_data[ix][iy] = 0;
       LPBs_pressed[ix][iy] = false;
       LPBs_prevPressed[ix][iy] = false;
+      LPBs_init[ix][iy] = false;
     }
   }
 
@@ -146,29 +148,32 @@ void draw() {
     for(int iy = 0; iy < 8; iy++){
       for(int ix = 0; ix < 9; ix++){
         setColorRaw(lightmap,ix,iy,update(ix,iy));
-        
       }
     }
     prev = keyPressed;
 
 
-    modeSel(600,50);
-    //colorSel(200,200,false);
-    modeSettings();
 
-    //println(selColRLow);
-    //println(selColGLow);
-    //println();
+    if(editorMode){
+      modeSel(600,70);
+      modeSettings();
+      drawLP();
+      handleLpClick();
+    }
+
     
-    drawLP();
-    handleLpClick();
+
+    
+    
+    saveEdit();
     updateLight(false);
-    compile();
+    //compile();
 
   }else{
     connect();
     
   }
+  prevPressed = mousePressed;
 }
 
 
@@ -296,7 +301,7 @@ void setTime(float xPos,float yPos){
     defTime += 10;
   }
 
-  prevPressed = mousePressed;
+  
 
   if(defTime <= 0){
     defTime = 1;
@@ -332,7 +337,7 @@ void handleLpClick(){
       stroke(0);
       //rect(ix*35+603,iy*35+400,30,30);
       if(ButtonSelector(ix*35+603,iy*35+400,30,30) && mousePressed){
-        LPBs_data[ix][iy] = 0;
+        LPBs_init[ix][iy] = defaultToggle && ModeSel_==2;
         LPBs_mode[ix][iy] = a[ModeSel_];
         LPBs_stdCol[ix][iy] = RG(selColRLow,selColGLow);
         LPBs_highlightCol[ix][iy] = RG(selColRLow,selColGHigh);
@@ -375,26 +380,6 @@ void drawLP(){
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -514,16 +499,19 @@ void connect(){
       if(key == '\n'){
         launchpad = new MidiBus(this, indexI, indexO);
         connected = true;
+        background(0);
+        fill(255);
+        text("loading...",10,10);
         updateLight(true);
         clear(3,0);
         updateLight(true);
-        delay(400);
+        delay(200);
         clear(0,3);
         updateLight(true);
-        delay(400);
+        delay(200);
         clear(3,3);
         updateLight(true);
-        delay(400);
+        delay(200);
         clear(0,0);
         updateLight(true);
       }
@@ -616,13 +604,58 @@ int get2Bit(int n, int k) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void saveEdit(){
   stroke(0);
   strokeWeight(2);
   fill(0,0,127);
-  rect(0,0,0,0);
+  rect(600,10,80,40);
+  rect(685,10,80,40);
+  textAlign(CENTER,CENTER);
+  textSize(15);
+  fill(255);
+  text("edit",640,25);
+  text("save",725,25);
+
+  if(ButtonSelector(600,10,80,40)&&mousePressed&&!prevPressed){
+    editorMode = !editorMode;
+  }
+
+  if(ButtonSelector(685,10,80,40)&&mousePressed&&!prevPressed){
+    saveStrings(prePath+currentPagePath, compile());
+  }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -675,15 +708,22 @@ void loadToLP(String blocks[]){
       int dataNum = i+(o*9)+1;
       //println("X:"+str(i)+"  Y:"+str(o)+"  I:"+str(dataNum));
       LPBs_mode[i][o] = data[dataNum][0];
-      LPBs_time[i][o] = Integer.valueOf(data[dataNum][1]);
-      LPBs_stdCol[i][o] = Integer.valueOf(data[dataNum][2]);
+      LPBs_time[i][o] = Integer.valueOf(data[dataNum][3]);
+      LPBs_stdCol[i][o] = Integer.valueOf(data[dataNum][1]);
+      LPBs_init[i][o] = data[dataNum][4] == "true";
 
       //println(Integer.valueOf(data[i+(o*9)+1][2]));, 
-      LPBs_highlightCol[i][o] = Integer.valueOf(data[dataNum][3]);
+      LPBs_highlightCol[i][o] = Integer.valueOf(data[dataNum][2]);
+      if(LPBs_init[i][o]){
+        LPBs_data[i][o] = 1;
+      }else{
+        LPBs_data[i][o] = 0;
+      }
     }
     //println(i);
     //printArray(LPBs_mode[i]);
   }
+
   
   updateLight(true);
 }
@@ -735,7 +775,7 @@ void MODE_selector(float posX, float posY){
 }
 
 
-String compile(){
+String[] compile(){
   String result = "";
   result = result + notesPath + "\n";
   for(int iy = 0; iy < 8; iy++){
@@ -744,12 +784,12 @@ String compile(){
       result = result + str(LPBs_stdCol[ix][iy]) + ",";
       result = result + str(LPBs_highlightCol[ix][iy]) + ",";
       result = result + str(LPBs_time[ix][iy]) + ",";
-      result = result + str(LPBs_data[ix][iy]) + ",";
+      result = result + str(LPBs_init[ix][iy]) + ",";
     }
     result = result.substring(0,result.length()-1) + "\n";
   }
   //println(result);
-  return result;
+  return result.split("\n");
 }
 
 void logo_none(float LogoPosX, float LogoPosY){
