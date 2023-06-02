@@ -70,7 +70,7 @@ void setup() {
 
   for(int iy = 0; iy < 8; iy++){
     for(int ix = 0; ix < 9; ix++){
-      LPBs_mode[ix][iy] = "";
+      LPBs_mode[ix][iy] = "none";
       LPBs_time[ix][iy] = 0;
       LPBs_stdCol[ix][iy] = 0;
       LPBs_highlightCol[ix][iy] = 0;
@@ -162,7 +162,9 @@ void draw() {
     }
 
     
-
+    for(int i = 0; i < 9; i++){
+      println(LPBs_mode[i][0] + str(LPBs_stdCol[i][0]) + str(LPBs_highlightCol[i][0]) + str(lightmap[i][0]));
+    }
     
     
     saveEdit();
@@ -636,6 +638,7 @@ void saveEdit(){
   }
 
   if(ButtonSelector(685,10,80,40)&&mousePressed&&!prevPressed){
+    println("saving");
     saveStrings(prePath+currentPagePath, compile());
   }
 
@@ -691,9 +694,9 @@ void clear(int r, int g){
 
 void loadToLP(String blocks[]){
   //String[] blocks = mainStr;
-  String data[][] = new String[73][4];
+  String data[][] = new String[73][5];
 
-  notes = blocks[0].split("-");
+  //notes = blocks[0].split("-");
   //printArray(data[0]);
   for(int i = 1; i<73;i++){
     data[i] = blocks[i].split(",");
@@ -719,9 +722,10 @@ void loadToLP(String blocks[]){
       }else{
         LPBs_data[i][o] = 0;
       }
+      //println(LPBs_mode[i][o]);
     }
-    //println(i);
-    //printArray(LPBs_mode[i]);
+    //println(o);
+    //printArray(LPBs_mode[o]);
   }
 
   
@@ -785,8 +789,9 @@ String[] compile(){
       result = result + str(LPBs_highlightCol[ix][iy]) + ",";
       result = result + str(LPBs_time[ix][iy]) + ",";
       result = result + str(LPBs_init[ix][iy]) + ",";
+      result = result.substring(0,result.length()-1) + "\n";
     }
-    result = result.substring(0,result.length()-1) + "\n";
+    //result = result.substring(0,result.length()-1) + "\n";
   }
   //println(result);
   return result.split("\n");
