@@ -143,7 +143,7 @@ void draw() {
         //println(CurrentPagePath);
          pageFile = loadStrings(prePath+currentPagePath);
         loadToLP(pageFile);
-        printArray(lightmap[0]);
+        //printArray(lightmap[0]);
         notesString = join(loadStrings(prePath+"notes_"+currentPagePath), "\n");
 
 
@@ -191,7 +191,7 @@ void draw() {
 
   }else{
     connect();
-    
+   
   }
   prevPressed = mousePressed;
 }

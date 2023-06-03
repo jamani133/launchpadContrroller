@@ -213,7 +213,7 @@ Boolean changeLight[][] = new Boolean[9][8];
 
   }else{
     connect();
-    
+   
   }
   prevPressed = mousePressed;
 }
@@ -979,7 +979,12 @@ Boolean changeLight[][] = new Boolean[9][8];
 
 
      public int update(int indexX,int indexY){
-         println(str(LPBs_mode[indexX][indexY] == "const") + " = " +  "const" + " == "+ LPBs_mode[indexX][indexY]);
+
+
+        String mode = LPBs_mode[indexX][indexY];
+
+
+         //println(str(LPBs_mode[indexX][indexY] == "const") + " = " +  STB("const")+ "(const)" + " == "+ STB(LPBs_mode[indexX][indexY])+"("+LPBs_mode[indexX][indexY]+")");
         //println(LPBs_mode[indexX][indexY] +" = "+ str(LPBs_stdCol[indexX][indexY]));
        
         if(LPBs_mode[indexX][indexY] == "none"){
@@ -1026,8 +1031,8 @@ Boolean changeLight[][] = new Boolean[9][8];
             }
             return LPBs_stdCol[indexX][indexY];
         }
-
-        if(LPBs_mode[indexX][indexY] == "const"){
+        println(str(LPBs_mode[indexX][indexY] == "const") + " = " +  "(const)" + " == "+ "("+LPBs_mode[indexX][indexY]);
+        if(mode == "const"){
            print("<<<<");
             return LPBs_stdCol[indexX][indexY]; 
         }
@@ -1035,6 +1040,17 @@ Boolean changeLight[][] = new Boolean[9][8];
         LPBs_prevPressed[indexX][indexY] = LPBs_pressed[indexX][indexY];
         return 0;
     }
+
+ public String STB(String s){
+StringBuilder buf = new StringBuilder();
+for (int i = 0; i < s.length(); i++ ) {
+    int characterASCII = s.charAt(i);
+
+    buf.append(Integer.toBinaryString(characterASCII));
+
+}
+ return buf.toString();
+}
 
 
   public void settings() { size(1000, 900); }
