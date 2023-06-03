@@ -176,7 +176,7 @@ Boolean changeLight[][] = new Boolean[9][8];
 
     for(int iy = 0; iy < 8; iy++){
       for(int ix = 0; ix < 9; ix++){
-        setColorRaw(lightmap,ix,iy,update(ix,iy));
+        setColorRaw(lightmap,ix,iy,update(ix,iy),false);
       }
     }
     prev = keyPressed;
@@ -718,12 +718,12 @@ Boolean changeLight[][] = new Boolean[9][8];
   changeLight[x][y] = prevCol != array[x][y];
 }
 
- public void setColorRaw(int[][] array, int x, int y, int val){
+ public void setColorRaw(int[][] array, int x, int y, int val,boolean force){
 
   int prevCol = array[x][y];
   //changeLight[x][y] = val != array[x][y];
   array[x][y] = val;
-  changeLight[x][y] = prevCol != array[x][y];
+  changeLight[x][y] = prevCol != array[x][y] || force;
 }
 
 
@@ -778,7 +778,8 @@ Boolean changeLight[][] = new Boolean[9][8];
 
   for(int iy = 0; iy < 8; iy++){
       for(int ix = 0; ix < 9; ix++){
-        setColorRaw(lightmap,ix,iy,update(ix,iy));
+        println(update(ix,iy));
+        setColorRaw(lightmap,ix,iy,update(ix,iy),true);
       }
     }
   updateLight(true);
@@ -978,6 +979,9 @@ Boolean changeLight[][] = new Boolean[9][8];
 
 
      public int update(int indexX,int indexY){
+         println(str(LPBs_mode[indexX][indexY] == "const") + " = " +  "const" + " == "+ LPBs_mode[indexX][indexY]);
+        //println(LPBs_mode[indexX][indexY] +" = "+ str(LPBs_stdCol[indexX][indexY]));
+       
         if(LPBs_mode[indexX][indexY] == "none"){
             return 0;
         }
@@ -1024,7 +1028,8 @@ Boolean changeLight[][] = new Boolean[9][8];
         }
 
         if(LPBs_mode[indexX][indexY] == "const"){
-            return LPBs_stdCol[indexX][indexY];
+           print("<<<<");
+            return LPBs_stdCol[indexX][indexY]; 
         }
 
         LPBs_prevPressed[indexX][indexY] = LPBs_pressed[indexX][indexY];

@@ -154,7 +154,7 @@ void draw() {
 
     for(int iy = 0; iy < 8; iy++){
       for(int ix = 0; ix < 9; ix++){
-        setColorRaw(lightmap,ix,iy,update(ix,iy));
+        setColorRaw(lightmap,ix,iy,update(ix,iy),false);
       }
     }
     prev = keyPressed;
@@ -696,12 +696,12 @@ void setColor(int[][] array, int x, int y, int Red, int Green){
   changeLight[x][y] = prevCol != array[x][y];
 }
 
-void setColorRaw(int[][] array, int x, int y, int val){
+void setColorRaw(int[][] array, int x, int y, int val,boolean force){
 
   int prevCol = array[x][y];
   //changeLight[x][y] = val != array[x][y];
   array[x][y] = val;
-  changeLight[x][y] = prevCol != array[x][y];
+  changeLight[x][y] = prevCol != array[x][y] || force;
 }
 
 
@@ -756,7 +756,8 @@ void loadToLP(String blocks[]){
 
   for(int iy = 0; iy < 8; iy++){
       for(int ix = 0; ix < 9; ix++){
-        setColorRaw(lightmap,ix,iy,update(ix,iy));
+        println(update(ix,iy));
+        setColorRaw(lightmap,ix,iy,update(ix,iy),true);
       }
     }
   updateLight(true);

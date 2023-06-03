@@ -1,5 +1,8 @@
 
     int update(int indexX,int indexY){
+         println(str(LPBs_mode[indexX][indexY] == "const") + " = " +  "const" + " == "+ LPBs_mode[indexX][indexY]);
+        //println(LPBs_mode[indexX][indexY] +" = "+ str(LPBs_stdCol[indexX][indexY]));
+       
         if(LPBs_mode[indexX][indexY] == "none"){
             return 0;
         }
@@ -46,7 +49,8 @@
         }
 
         if(LPBs_mode[indexX][indexY] == "const"){
-            return LPBs_stdCol[indexX][indexY];
+           print("<<<<");
+            return LPBs_stdCol[indexX][indexY]; 
         }
 
         LPBs_prevPressed[indexX][indexY] = LPBs_pressed[indexX][indexY];
