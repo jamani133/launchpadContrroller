@@ -28,17 +28,17 @@ public class launchpadContrroller extends PApplet {
 
 String prePath = "pages/";
 
-//String pagePaths[] = loadStrings("files.txt");
-String pagePaths[] = {
-  "test1.txt"
-};
+String songNames[];
+String pagePaths[] = {"","","","","","","","","","","","","","","","","","","","","","","","","","","",""};
+
+String notesString = "";
 
 String a[] = {"none","const","temp","toggle","fadeOut","flash"};
-String notesPath = "ass";
+String notesPath = "UNUSEDFORNOW";
 //wee
 
 boolean defaultToggle = false;
-String currentPagePath = pagePaths[0];
+String currentPagePath;
 String pageFile[];
 
 String[] notes;
@@ -101,8 +101,14 @@ Boolean changeLight[][] = new Boolean[9][8];
       LPBs_prevPressed[ix][iy] = false;
       LPBs_init[ix][iy] = false;
     }
+    
+  songNames = loadStrings("files.txt");
   }
-
+  for(int i = 0; i<songNames.length; i++){
+    println(songNames[i]);
+    pagePaths[i] = songNames[i]+".txt";
+  }
+  currentPagePath = pagePaths[0];
 
     //LPBs_mode[0][0] = "toggle";
     //LPBs_time[0][0] = 300;
@@ -149,6 +155,7 @@ Boolean changeLight[][] = new Boolean[9][8];
       }
       if(keyCode == DOWN && !prev){
         if(page < pagePaths.length-1){
+          
           page++;
         }
       }
@@ -159,7 +166,7 @@ Boolean changeLight[][] = new Boolean[9][8];
          pageFile = loadStrings(prePath+currentPagePath);
         loadToLP(pageFile);
         printArray(lightmap[0]);
-
+        notesString = join(loadStrings(prePath+"notes_"+currentPagePath), "\n");
 
 
       }
@@ -178,7 +185,7 @@ Boolean changeLight[][] = new Boolean[9][8];
     textSize(25);
     textAlign(TOP,TOP);
     fill(255);
-    text(join(loadStrings(prePath+"notes_"+currentPagePath), "\n"),320,50,width-380,4000);
+    text(notesString,350,50,width-400,4000);
 
 
 
@@ -678,8 +685,8 @@ Boolean changeLight[][] = new Boolean[9][8];
   }
 
   if(ButtonSelector(770,10,80,40)&&mousePressed&&!prevPressed){
-    println(prePath+"notes_"+currentPagePath);
-    //launch("editor",{prePath+"notes_"+currentPagePath});
+    println(sketchPath(prePath+"notes_"+currentPagePath));
+    exec("notepad",sketchPath(prePath+"notes_"+currentPagePath));
   }
 
 }
