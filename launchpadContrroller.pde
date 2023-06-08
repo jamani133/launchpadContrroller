@@ -146,7 +146,7 @@ void draw() {
         currentPagePath = pagePaths[page];
         //println(CurrentPagePath);
          pageFile = loadStrings(prePath+currentPagePath);
-        loadToLP(pageFile);
+         loadToLP(pageFile);
         //printArray(lightmap[0]);
         notesString = join(loadStrings(prePath+"notes_"+currentPagePath), "\n");
 
