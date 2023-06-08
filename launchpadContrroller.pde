@@ -19,13 +19,15 @@ boolean defaultToggle = false;
 String currentPagePath;
 String pageFile[];
 
+boolean unsaved = false;
+
 String[] notes;
 boolean editorMode = false;
 boolean prevPressed;
 
 int defTime = 10;
 
-String LPBs_mode[][] = new String[9][8];
+int LPBs_mode[][] = new int[9][8];
 int LPBs_time[][] = new int[9][8];
 int LPBs_stdCol[][] = new int[9][8];
 int LPBs_highlightCol[][] = new int[9][8];
@@ -53,7 +55,7 @@ int selColGHigh = 0;
 int selColRLow = 0;
 int selColGLow = 0;
 
-
+int selPage = 100;
 
 boolean selecting = true;
 
@@ -70,7 +72,7 @@ void setup() {
 
   for(int iy = 0; iy < 8; iy++){
     for(int ix = 0; ix < 9; ix++){
-      LPBs_mode[ix][iy] = "none";
+      LPBs_mode[ix][iy] = 0;
       LPBs_time[ix][iy] = 0;
       LPBs_stdCol[ix][iy] = 0;
       LPBs_highlightCol[ix][iy] = 0;
@@ -83,7 +85,7 @@ void setup() {
   songNames = loadStrings("files.txt");
   }
   for(int i = 0; i<songNames.length; i++){
-    println(songNames[i]);
+    //println(songNames[i]);
     pagePaths[i] = songNames[i]+".txt";
   }
   currentPagePath = pagePaths[0];
@@ -96,7 +98,7 @@ void setup() {
 
 
  pageFile = loadStrings(prePath+currentPagePath);
- MidiBus.list();
+ //MidiBus.list();
   clear(0,0);
  
   //oldlightmap = lightmap;
@@ -122,7 +124,7 @@ void draw() {
     background(0);
 
     //drawGrid();
-    SelectorList(pagePaths,page,20,20);
+    
 
 
     if(keyPressed){
@@ -139,6 +141,8 @@ void draw() {
       }
       if(key == '\n' && !prev){
         
+        
+        selPage = page;
         currentPagePath = pagePaths[page];
         //println(CurrentPagePath);
          pageFile = loadStrings(prePath+currentPagePath);
@@ -149,7 +153,10 @@ void draw() {
 
       }
     }
-
+    fill(0,127,0);
+    noStroke();
+    rect(20,4+selPage*20,300,20);
+    SelectorList(pagePaths,page,20,20);
 
 
     for(int iy = 0; iy < 8; iy++){
@@ -165,7 +172,7 @@ void draw() {
     fill(255);
     text(notesString,350,50,width-400,4000);
 
-
+   
 
 
     if(editorMode){
@@ -179,6 +186,17 @@ void draw() {
       
     }
 
+
+ if(unsaved){
+      fill(255,0,0);
+      noStroke();
+      rect(0,0,0,0);
+      textAlign(CENTER,CENTER);
+      textSize(15);
+      rect(855,10,80,40);
+      fill(255);
+      text("Unsaved\nChanges",894,25);
+    }
     
     //for(int i = 0; i < 9; i++){
     //  println(LPBs_mode[i][0] + str(LPBs_stdCol[i][0]) + str(LPBs_highlightCol[i][0]) + str(lightmap[i][0]));
@@ -357,8 +375,9 @@ void handleLpClick(){
       stroke(0);
       //rect(ix*35+603,iy*35+400,30,30);
       if(ButtonSelector(ix*35+603,iy*35+400,30,30) && mousePressed){
+        unsaved = true;
         LPBs_init[ix][iy] = defaultToggle && ModeSel_==2;
-        LPBs_mode[ix][iy] = a[ModeSel_];
+        LPBs_mode[ix][iy] = ModeSel_;
         LPBs_stdCol[ix][iy] = RG(selColRLow,selColGLow);
         LPBs_highlightCol[ix][iy] = RG(selColRLow,selColGHigh);
         LPBs_time[ix][iy] = defTime;
@@ -390,11 +409,17 @@ void drawLP(){
       //map(get2Bit( lightmap[ix][iy]  ,4),0,3,0,255);//green
       
       fill(map(get2Bit( lightmap[ix][iy]  ,0),0,3,0,255),map(get2Bit( lightmap[ix][iy]  ,4),0,3,0,255),0);
-
+      noStroke();
       if(ix == 8){
         ellipse(ix*35+620,iy*35+415,30,30);
       }else{
         rect(ix*35+605,iy*35+400,30,30);
+      }
+      if(LPBs_mode[ix][iy] == 0){
+        //println("out");
+        stroke(255,0,0);
+        strokeWeight(2);
+        line(ix*35+608,iy*35+403,ix*35+632,iy*35+427);
       }
       
     }
@@ -658,12 +683,13 @@ void saveEdit(){
   }
 
   if(ButtonSelector(685,10,80,40)&&mousePressed&&!prevPressed){
-    println("saving");
+    //println("saving");
+    unsaved = false;
     saveStrings(prePath+currentPagePath, compile());
   }
 
   if(ButtonSelector(770,10,80,40)&&mousePressed&&!prevPressed){
-    println(sketchPath(prePath+"notes_"+currentPagePath));
+    //println(sketchPath(prePath+"notes_"+currentPagePath));
     exec("notepad",sketchPath(prePath+"notes_"+currentPagePath));
   }
 
@@ -735,7 +761,10 @@ void loadToLP(String blocks[]){
       //println(str(i)+"  "+str(o)+"  "+str(i+o*9+1));
       int dataNum = i+(o*9)+1;
       //println("X:"+str(i)+"  Y:"+str(o)+"  I:"+str(dataNum));
-      LPBs_mode[i][o] = data[dataNum][0];
+      //if(data[dataNum][0] == "none"){
+       // data[dataNum][0] = "0";
+      
+      LPBs_mode[i][o] = Integer.valueOf(data[dataNum][0]);
       LPBs_time[i][o] = Integer.valueOf(data[dataNum][3]);
       LPBs_stdCol[i][o] = Integer.valueOf(data[dataNum][1]);
       LPBs_init[i][o] = data[dataNum][4] == "true";
@@ -756,7 +785,7 @@ void loadToLP(String blocks[]){
 
   for(int iy = 0; iy < 8; iy++){
       for(int ix = 0; ix < 9; ix++){
-        println(update(ix,iy));
+        //println(update(ix,iy));
         setColorRaw(lightmap,ix,iy,update(ix,iy),true);
       }
     }
@@ -769,8 +798,7 @@ void modeSel(float posX, float posY){
 
   MODE_selector(posX,posY);
 
-  String a[] = {"none","consts","temp","toggle","fadeOut","flash"};
-  
+
   noFill();
   stroke(0,255,0);
   strokeWeight(4);
@@ -815,7 +843,7 @@ String[] compile(){
   result = result + notesPath + "\n";
   for(int iy = 0; iy < 8; iy++){
     for(int ix = 0; ix < 9; ix++){
-      result = result + LPBs_mode[ix][iy] + ",";
+      result = result + str(LPBs_mode[ix][iy]) + ",";
       result = result + str(LPBs_stdCol[ix][iy]) + ",";
       result = result + str(LPBs_highlightCol[ix][iy]) + ",";
       result = result + str(LPBs_time[ix][iy]) + ",";
