@@ -7,7 +7,7 @@ import javax.sound.midi.ShortMessage;
 String prePath = "pages/";
 
 String songNames[];
-String pagePaths[] = {"","","","","","","","","","","","","","","","","","","","","","","","","","","",""};
+String pagePaths[] = {"","","","","","","","","","","","","","","","","","","","","","","","","",""};
 
 String notesString = "";
 
