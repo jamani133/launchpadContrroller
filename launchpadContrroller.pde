@@ -61,6 +61,7 @@ boolean selecting = true;
 
 
 MidiBus launchpad;
+MidiBus outputPort;
 
 int[][] lightmap = new int[9][8];
 Boolean changeLight[][] = new Boolean[9][8];
@@ -222,6 +223,8 @@ void midiMessage(MidiMessage message) {
   int Param1 = int(message.getMessage()[1]);
   int Param2 = int(message.getMessage()[2]);
 
+  outputPort.sendMessage(Cmd,0,Param1,Param2);
+
   if(Cmd == 128 ||Cmd == 144){
     //println(str(getX(Param1)) + "  " + str(getY(Param1)));
     LPBs_pressed[getX(Param1)][getY(Param1)] = Param2 > 0;
@@ -327,29 +330,29 @@ void setTime(float xPos,float yPos){
 
 
   if(ButtonSelector(xPos,yPos,40,40) && mousePressed && !prevPressed){
-    defTime -= 10;
+    defTime -= 100;
   }
   if(ButtonSelector(xPos+40,yPos,40,40) && mousePressed && !prevPressed){
-    defTime -= 1;
+    defTime -= 10;
   }
   if(ButtonSelector(xPos+200,yPos,40,40) && mousePressed && !prevPressed){
-    defTime += 1;
+    defTime += 10;
   }
   if(ButtonSelector(xPos+240,yPos,40,40) && mousePressed && !prevPressed){
-    defTime += 10;
+    defTime += 100;
   }
 
   
 
   if(defTime <= 0){
-    defTime = 1;
+    defTime = 10;
   }
 
   fill(255);
   textAlign(CENTER,CENTER);
   textSize(25);
 
-  text(str(defTime*100)+" ms", xPos+140,yPos+15);
+  text(str(defTime)+" ms", xPos+140,yPos+15);
   
   text("--", xPos+20,yPos+15);
   text("-", xPos+60,yPos+15);
@@ -542,7 +545,9 @@ void connect(){
         }
       }
       if(key == '\n'){
-        launchpad = new MidiBus(this, indexI, indexO);
+        launchpad = new MidiBus(this, indexI, indexI);
+        outputPort = new MidiBus(this);
+        outputPort.addOutput(indexO);
         connected = true;
         background(0);
         fill(255);
