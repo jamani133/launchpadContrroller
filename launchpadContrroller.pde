@@ -6,7 +6,7 @@ import javax.sound.midi.ShortMessage;
 
 
 String prePath = "pages/";
-
+int selID = 0;
 String songNames[];
 String pagePaths[] = {"","","","","","","","","","","","","","","","","","","","","","","","","","","","",""};
 
@@ -271,7 +271,7 @@ void modeSettings(){
 
     break;
   }
-  if(ModeSel_=>10){
+  if(ModeSel_ >= 10){
     colorSel(600,220,false);
     colorSel(780,220,true);
     setSelID(600,140);
@@ -380,10 +380,10 @@ void setSelID(float xPos,float yPos){
 
 
   if(ButtonSelector(xPos+40,yPos,40,40) && mousePressed && !prevPressed){
-    selID -= 10;
+    selID -= 1;
   }
   if(ButtonSelector(xPos+200,yPos,40,40) && mousePressed && !prevPressed){
-    selID += 10;
+    selID += 1;
   }
 
 
