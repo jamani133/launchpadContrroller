@@ -1,3 +1,4 @@
+
 import themidibus.*; //http://www.smallbutdigital.com/docs/themidibus/themidibus/MidiBus.html
 import javax.sound.midi.MidiMessage; //Import the MidiMessage classes http://java.sun.com/j2se/1.5.0/docs/api/javax/sound/midi/MidiMessage.html
 import javax.sound.midi.SysexMessage;
@@ -545,9 +546,11 @@ void connect(){
         }
       }
       if(key == '\n'){
-        launchpad = new MidiBus(this, indexI, indexI);
+        launchpad = new MidiBus(this);
+        launchpad.addOutput(InputList[indexI]);
+        launchpad.addInput(InputList[indexI]);
         outputPort = new MidiBus(this);
-        outputPort.addOutput(indexO);
+        outputPort.addOutput(OutputList[indexO]);
         connected = true;
         background(0);
         fill(255);
