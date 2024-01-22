@@ -226,7 +226,7 @@ void midiMessage(MidiMessage message) {
 
   outputPort.sendMessage(Cmd,0,Param1,Param2);
 
-  if(Cmd == 128 ||Cmd == 144){
+  if(Cmd == 128 || Cmd == 144){
     //println(str(getX(Param1)) + "  " + str(getY(Param1)));
     LPBs_pressed[getX(Param1)][getY(Param1)] = Param2 > 0;
   }
@@ -271,6 +271,11 @@ void modeSettings(){
 
     break;
   }
+  if(ModeSel_=>10){
+    colorSel(600,220,false);
+    colorSel(780,220,true);
+    setSelID(600,140);
+  }
 }
 
 
@@ -307,9 +312,7 @@ void colorSel(float posX, float posY, boolean high){
     rect(posX+selColRLow*35,posY+selColGLow*35,35,35);
   }
 
-
   colSelHandler(posX,posY,high);
-
 
 }
 
@@ -361,7 +364,44 @@ void setTime(float xPos,float yPos){
   text("++", xPos+260,yPos+15);
 }
 
+void setSelID(float xPos,float yPos){
 
+  stroke(0);
+  strokeWeight(2);
+  fill(127,0,0);
+
+  rect(xPos+40,yPos,40,40);
+  fill(80);
+  rect(xPos+80,yPos,120,40);
+  fill(0,127,0);
+  rect(xPos+200,yPos,40,40);
+
+
+
+
+  if(ButtonSelector(xPos+40,yPos,40,40) && mousePressed && !prevPressed){
+    selID -= 10;
+  }
+  if(ButtonSelector(xPos+200,yPos,40,40) && mousePressed && !prevPressed){
+    selID += 10;
+  }
+
+
+  
+
+  if(selID < 0){
+    selID = 0;
+  }
+
+  fill(255);
+  textAlign(CENTER,CENTER);
+  textSize(25);
+
+  text("sel"+str(selID), xPos+140,yPos+15);
+  
+  text("-", xPos+60,yPos+15);
+  text("+", xPos+220,yPos+15);
+}
 
 
 
@@ -381,7 +421,10 @@ void handleLpClick(){
       if(ButtonSelector(ix*35+603,iy*35+400,30,30) && mousePressed){
         unsaved = true;
         LPBs_init[ix][iy] = defaultToggle && ModeSel_==2;
-        LPBs_mode[ix][iy] = ModeSel_;
+        LPBs_mode[ix][iy] = ModeSel_ + selID;
+        if(ModeSel_ >= 10){
+          LPBs_mode[ix][iy] += selID;
+        }
         LPBs_stdCol[ix][iy] = RG(selColRLow,selColGLow);
         LPBs_highlightCol[ix][iy] = RG(selColRLow,selColGHigh);
         LPBs_time[ix][iy] = defTime;
@@ -824,6 +867,7 @@ void modeSel(float posX, float posY){
   logo_toggle(posX+150,posY);
   logo_fadeOut(posX+200,posY);
   logo_flash(posX+250,posY);
+  logo_selector(posX+300,posY);
 
 }
 
@@ -837,7 +881,7 @@ void MODE_selector(float posX, float posY){
     return;
   }
    
-  if(mouseX <= posX || mouseX > posX+299){
+  if(mouseX <= posX || mouseX > posX+349){
     return;
   }
 
@@ -934,6 +978,25 @@ void logo_flash(float LogoPosX, float LogoPosY){
   line(LogoPosX+35,LogoPosY+20,LogoPosX+45,LogoPosY+20);
 
 } 
+
+void logo_selector(float LogoPosX, float LogoPosY){
+  noStroke();
+  fill(127,0,0);
+  rect(LogoPosX,LogoPosY,10,30);
+  rect(LogoPosX+25,LogoPosY,20,30);
+  fill(0,127,0);
+  rect(LogoPosX+10,LogoPosY,15,30);
+
+  stroke(255);
+  strokeWeight(2);
+
+  line(LogoPosX,LogoPosY+10,LogoPosX,LogoPosY+20);
+  line(LogoPosX+10,LogoPosY+10,LogoPosX+10,LogoPosY+20);
+  line(LogoPosX+20,LogoPosY+10,LogoPosX+20,LogoPosY+20);
+  line(LogoPosX+30,LogoPosY+10,LogoPosX+30,LogoPosY+20);
+
+} 
+
 void logo_fadeOut(float LogoPosX, float LogoPosY){
   noStroke();
     fill(127,0,0);

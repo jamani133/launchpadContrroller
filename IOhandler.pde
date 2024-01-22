@@ -16,7 +16,7 @@ void updateLight(boolean all){
         if(changeLight[ix][iy]){
           launchpad.sendNoteOn(0,ix+(iy*16),lightmap[ix][iy]);
           changeLight[ix][iy] = false;
-          println(lightmap[ix][iy]);
+          //println(lightmap[ix][iy]);
         }
       }
     }

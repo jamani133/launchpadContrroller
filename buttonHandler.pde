@@ -52,6 +52,24 @@
             }
             return LPBs_stdCol[indexX][indexY];
         }
+
+        if(LPBs_mode[indexX][indexY] >= 10){ //selector
+            if(LPBs_pressed[indexX][indexY]){
+                for(int iy = 0; iy < 4; iy++){
+                    for(int ix = 0; ix < 4; ix++){
+                        if(LPBs_mode[indexX][indexY] == LPBs_mode[ix][iy]){
+                            LPBs_data[indexX][indexY] = 0;
+                        }
+                    }
+                }
+                LPBs_data[indexX][indexY] = 1;
+            }
+            if(LPBs_data[indexX][indexY] == 1){
+                return LPBs_highlightCol[indexX][indexY];
+            }
+            return LPBs_stdCol[indexX][indexY];
+        }
+
         //println(str(LPBs_mode[indexX][indexY] == "const") + " = " +  "(const)" + " == "+ "("+LPBs_mode[indexX][indexY]);
         if(LPBs_mode[indexX][indexY] == 1){ //const
            //print("<<<<");
