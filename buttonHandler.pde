@@ -55,10 +55,12 @@
 
         if(LPBs_mode[indexX][indexY] >= 10){ //selector
             if(LPBs_pressed[indexX][indexY]){
-                for(int iy = 0; iy < 4; iy++){
-                    for(int ix = 0; ix < 4; ix++){
+                for(int iy = 0; iy < 8; iy++){
+                    for(int ix = 0; ix < 9; ix++){
+                        println("this:"+str(LPBs_mode[indexX][indexY])+" other:"+str(LPBs_mode[ix][iy]));
                         if(LPBs_mode[indexX][indexY] == LPBs_mode[ix][iy]){
-                            LPBs_data[indexX][indexY] = 0;
+                           println("resetting");
+                            LPBs_data[ix][iy] = 0;
                         }
                     }
                 }
