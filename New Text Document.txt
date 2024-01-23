@@ -1,8 +1,0 @@
-make GUI
-add sav e and load fiel system
-page switching
-editor
-notes
-file compiler
-
-
