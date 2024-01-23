@@ -57,9 +57,9 @@
             if(LPBs_pressed[indexX][indexY]){
                 for(int iy = 0; iy < 8; iy++){
                     for(int ix = 0; ix < 9; ix++){
-                        println("this:"+str(LPBs_mode[indexX][indexY])+" other:"+str(LPBs_mode[ix][iy]));
+                        //println("this:"+str(LPBs_mode[indexX][indexY])+" other:"+str(LPBs_mode[ix][iy]));
                         if(LPBs_mode[indexX][indexY] == LPBs_mode[ix][iy]){
-                           println("resetting");
+                           //println("resetting");
                             LPBs_data[ix][iy] = 0;
                         }
                     }
