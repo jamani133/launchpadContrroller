@@ -224,8 +224,10 @@ void midiMessage(MidiMessage message) {
   int Cmd = int(message.getMessage()[0]);
   int Param1 = int(message.getMessage()[1]);
   int Param2 = int(message.getMessage()[2]);
+  
+  
 
-  outputPort.sendMessage(Cmd, 0, Param1, Param2);
+  outputPort.sendMessage(Cmd, 0, getX(Param1) + (getY(Param1)*9) , Param2);
 
   if (Cmd == 128 || Cmd == 144) {
     //println(str(getX(Param1)) + "  " + str(getY(Param1)));
